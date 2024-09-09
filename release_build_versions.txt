@@ -3,6 +3,8 @@
 # For Kubernetes and CRI-O, we fetch the latest versions to be built.
 # The below lists _additional_ kubernetes versions to be built.
 
+# Only do needed latest versions
+
 docker-27.2.1
 
 docker_compose-2.29.2
