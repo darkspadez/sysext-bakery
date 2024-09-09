@@ -8,41 +8,6 @@
 
 set -euo pipefail
 
-
-echo
-echo "Fetching list of latest Kubernetes minor releases"
-echo "================================================="
-KBS_VERS=$(curl -fsSL --retry-delay 1 --retry 60 --retry-connrefused \
-                --retry-max-time 60 --connect-timeout 20  \
-                https://raw.githubusercontent.com/kubernetes/website/main/data/releases/schedule.yaml \
-		| yq -r '.schedules[] | .previousPatches[0] // (.release = .release + ".0") | .release')
-if [[ -z "${KBS_VERS}" ]] ; then
-    echo "Failed fetching Kubernetes versions"
-    exit 1
-fi
-
-KBS_VERS_ARRAY=(${KBS_VERS})
-printf "%s\n" "${KBS_VERS_ARRAY[@]}"
-
-echo "Fetching list of latest CRI-O patch releases"
-echo "================================================="
-
-git ls-remote --tags --sort=-v:refname https://github.com/cri-o/cri-o \
-    | grep -v "{}" \
-    | awk '{ print $2}' \
-    | cut --delimiter='/' --fields=3 \
-    > crio.txt
-
-CRIO=()
-for r in "${KBS_VERS_ARRAY[@]}"; do
-    if ! grep -q "v${r%.*}" crio.txt; then
-        echo "Skipping $r"
-        continue
-    fi
-    version=$(cat crio.txt | grep "v${r%.*}" | head -n1)
-    CRIO+=( "crio-${version:1}" )
-done
-
 streams=()
 
 echo
@@ -51,13 +16,6 @@ echo "================"
 
 mapfile -t images < <( awk '{ content=sub("[[:space:]]*#.*", ""); if ($0) print $0; }' \
                        release_build_versions.txt )
-
-KUBERNETES=()
-for v in "${KBS_VERS_ARRAY[@]}"; do
-    KUBERNETES+=( "kubernetes-v${v}" )
-done
-images+=( "${CRIO[@]}" )
-images+=( "${KUBERNETES[@]}" )
 
 echo "building: ${images[@]}"
 
@@ -87,7 +45,7 @@ done
   
 echo "" >> Release.md
 echo "The release includes the following sysexts from previous releases:" >> Release.md
-awk '{ print "* ["$1"]("$2")" }' prev_release_sysexts.txt >>Release.md
+#awk '{ print "* ["$1"]("$2")" }' prev_release_sysexts.txt >>Release.md
 
 echo
 echo "Generating systemd-sysupdate configurations and SHA256SUM."
