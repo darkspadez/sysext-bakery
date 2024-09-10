@@ -8,6 +8,20 @@
 
 set -euo pipefail
 
+echo
+echo "Fetching previous 'latest' release sysexts"
+echo "=========================================="
+curl -fsSL --retry-delay 1 --retry 60 --retry-connrefused \
+         --retry-max-time 60 --connect-timeout 20  \
+         https://api.github.com/repos/flatcar/sysext-bakery/releases/latest \
+    | jq -r '.assets[] | "\(.name)\t\(.browser_download_url)"' | { grep -E '\.raw$' || true; } | tee prev_release_sysexts.txt
+
+while IFS=$'\t' read -r name url; do
+    echo
+    echo "  ## Fetching ${name} <-- ${url}"
+    curl -o "${name}" -fsSL --retry-delay 1 --retry 60 --retry-connrefused --retry-max-time 60 --connect-timeout 20  "${url}"
+done <prev_release_sysexts.txt
+
 streams=()
 
 echo
@@ -25,7 +39,7 @@ echo "The release adds the following sysexts:" >> Release.md
 for image in "${images[@]}"; do
   component="${image%-*}"
   version="${image#*-}"
-  for arch in x86-64 arm64; do
+  for arch in x86-64; do
     target="${image}-${arch}.raw"
     if [ -f "${target}" ] ; then
         echo "  ## Skipping ${target} because it already exists (asset from previous release)"
@@ -45,7 +59,7 @@ done
   
 echo "" >> Release.md
 echo "The release includes the following sysexts from previous releases:" >> Release.md
-#awk '{ print "* ["$1"]("$2")" }' prev_release_sysexts.txt >>Release.md
+awk '{ print "* ["$1"]("$2")" }' prev_release_sysexts.txt >>Release.md
 
 echo
 echo "Generating systemd-sysupdate configurations and SHA256SUM."
