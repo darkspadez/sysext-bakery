@@ -73,7 +73,7 @@ for stream in "${streams[@]}"; do
 Verify=false
 [Source]
 Type=url-file
-Path=https://github.com/flatcar/sysext-bakery/releases/latest/download/
+Path=https://github.com/darkspadez/sysext-bakery/releases/latest/download/
 MatchPattern=${component}${pattern}-%a.raw
 [Target]
 InstancesMax=3
