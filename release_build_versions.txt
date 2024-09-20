@@ -7,6 +7,6 @@
 
 docker-27.2.1
 
-docker_compose-2.29.5
+docker_compose-2.29.6
 
 nvidia_runtime-v1.16.1
