@@ -4,7 +4,7 @@ set -euo pipefail
 export ARCH="${ARCH-x86-64}"
 SCRIPTFOLDER="$(dirname "$(readlink -f "$0")")"
 ONLY_CONTAINERD="${ONLY_CONTAINERD:-0}"
-ONLY_DOCKER="${ONLY_DOCKER:-0}"
+ONLY_DOCKER="1"
 
 if [ $# -lt 2 ] || [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
   echo "Usage: $0 VERSION SYSEXTNAME"
