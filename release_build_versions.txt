@@ -6,6 +6,6 @@ docker-27.3.1
 
 docker_compose-2.31.0
 
-nvidia_runtime-v1.17.2
+nvidia_runtime-v1.17.3
 
 containerd-2.0.0
