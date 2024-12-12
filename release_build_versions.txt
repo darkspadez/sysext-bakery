@@ -2,7 +2,7 @@
 
 # Only do needed latest versions
 
-docker-27.3.1
+docker-27.4.0
 
 docker_compose-2.31.0
 
