@@ -2,10 +2,10 @@
 
 # Only do needed latest versions
 
-docker-27.4.0
+docker-27.4.1
 
-docker_compose-2.31.0
+docker_compose-2.32.1
 
 nvidia_runtime-v1.17.3
 
-containerd-2.0.0
+containerd-2.0.1
