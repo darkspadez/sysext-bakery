@@ -8,4 +8,4 @@ docker_compose-2.33.1
 
 nvidia_runtime-v1.17.4
 
-containerd-2.0.2
+containerd-2.0.3
