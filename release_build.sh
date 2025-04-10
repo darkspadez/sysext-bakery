@@ -39,7 +39,7 @@ echo "The release adds the following sysexts:" >> Release.md
 for image in "${images[@]}"; do
   component="${image%-*}"
   version="${image#*-}"
-  for arch in x86-64; do
+  for arch in x86-64 arm64; do
     target="${image}-${arch}.raw"
     if [ -f "${target}" ] ; then
         echo "  ## Skipping ${target} because it already exists (asset from previous release)"
