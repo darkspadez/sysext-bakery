@@ -4,8 +4,8 @@
 
 docker-28.1.1
 
-docker_compose-2.35.1
+docker_compose-2.36.0
 
 nvidia_runtime-v1.17.6
 
-containerd-2.0.5
+containerd-2.1.0
