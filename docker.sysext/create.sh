@@ -41,33 +41,11 @@ function populate_sysext_root() {
   mkdir -p "${sysextroot}"/usr/bin
   cp -R docker/* "${sysextroot}"/usr/bin/
 
-  if [[ "${without}" == docker ]] ; then
-    announce "Removing docker from sysext as requested (shipping containerd/runc only)"
+  announce "Removing containerd / runc from sysext as requested (shipping docker only)"
 
-    rm "${sysextroot}/usr/bin/docker" \
-       "${sysextroot}/usr/bin/dockerd" \
-       "${sysextroot}/usr/bin/docker-init" \
-       "${sysextroot}/usr/bin/docker-proxy" \
-       "${sysextroot}/usr/lib/systemd/system/docker.socket" \
-       "${sysextroot}/usr/lib/systemd/system/sockets.target.d/10-docker-socket.conf" \
-       "${sysextroot}/usr/lib/systemd/system/docker.service"
-
-     rmdir "${sysextroot}/usr/lib/systemd/system/sockets.target.d"
-
-  elif [[ "${without}" == containerd ]] ; then
-    announce "Removing containerd / runc from sysext as requested (shipping docker only)"
-
-    rm "${sysextroot}/usr/bin/containerd" \
-       "${sysextroot}/usr/bin/containerd-shim-runc-v2" \
-       "${sysextroot}/usr/bin/ctr" \
-       "${sysextroot}/usr/bin/runc" \
-       "${sysextroot}/usr/lib/systemd/system/containerd.service" \
-       "${sysextroot}/usr/lib/systemd/system/multi-user.target.d/10-containerd-service.conf" \
-       "${sysextroot}/usr/share/containerd/config.toml" \
-       "${sysextroot}/usr/share/containerd/config-cgroups.toml"
-
-     rmdir "${sysextroot}/usr/share/containerd" \
-           "${sysextroot}/usr/lib/systemd/system/multi-user.target.d/"
-  fi
+  rm "${sysextroot}/usr/bin/containerd" \
+      "${sysextroot}/usr/bin/containerd-shim-runc-v2" \
+      "${sysextroot}/usr/bin/ctr" \
+      "${sysextroot}/usr/bin/runc"
 }
 # --
