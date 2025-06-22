@@ -18,8 +18,8 @@ function populate_sysext_root() {
   local version="$3"
 
   # The github release uses different arch identifiers
-  local rel_arch="$(arch_transform 'x86-64' 'x86_64' "$arch")"
-  rel_arch="$(arch_transform 'arm64' 'aarch64' "$rel_arch")"
+  local rel_arch="$(arch_transform 'x86-64' 'amd64' "$arch")"
+  rel_arch="$(arch_transform 'arm64' 'arm64' "$rel_arch")"
 
   mkdir -p "${sysextroot}/usr/local/lib/docker/cli-plugins"
   curl -o "${sysextroot}/usr/local/lib/docker/cli-plugins/docker-buildx" \
