@@ -89,7 +89,7 @@ jobs:
           ./release.sh ${{ matrix.release }}
 
       - name: create a new release
-        uses: softprops/action-gh-release@v2.2.2
+        uses: softprops/action-gh-release@v2
         with:
           make_latest: false
           tag_name: ${{ steps.build.outputs.tag }}
@@ -135,7 +135,7 @@ jobs:
           ./release_meta.sh ${{ matrix.extension }}
 
       - name: create new metadata release
-        uses: softprops/action-gh-release@v2.2.2
+        uses: softprops/action-gh-release@v2
         with:
           make_latest: false
           tag_name: ${{ matrix.extension }}
@@ -176,7 +176,7 @@ jobs:
           ./release_meta.sh
 
       - name: create new metadata release
-        uses: softprops/action-gh-release@v2.2.2
+        uses: softprops/action-gh-release@v2
         with:
           make_latest: true
           tag_name: SHA256SUMS
