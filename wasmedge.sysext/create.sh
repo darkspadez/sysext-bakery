@@ -27,7 +27,7 @@ function populate_sysext_root() {
   mkdir -p "${sysextroot}/usr/lib"
 
   PATH_PREFIX=""
-  if [[ "$(printf '%s\n' "1.5.0" "$version" | sort -V | head -n1)" == "$version" ]]; then
+  if [[ "$(printf '%s\n' "0.5.0" "$version" | sort -V | head -n1)" == "$version" ]]; then
       PATH_PREFIX="WasmEdge-${version}-Linux/"
   fi
   
