@@ -106,24 +106,6 @@ local format="$(get_optional_param "format" "erofs" "${@}")"
 
 ---
 
-### MUST PRESERVE: Custom Release Versions
-
-**File**: `release_build_versions.txt`
-
-**Fork-Specific Entries**:
-```
-docker 28.2.1
-tailscale v1.84.0
-```
-
-**Rules**:
-- These versions are specific to this fork's needs
-- When merging upstream changes, preserve these version entries
-- If upstream adds newer versions, keep both sets (fork + upstream)
-- Maintain alphabetical/version ordering
-
----
-
 ## Automated Merge Procedure
 
 When instructed to merge from upstream, follow these steps:
@@ -172,14 +154,6 @@ Strategy: ACCEPT UPSTREAM + OVERRIDE DEFAULT
 - Ensure format default is "erofs" not "squashfs"
 ```
 
-#### release_build_versions.txt Conflicts
-```
-Strategy: UNION
-- Include both upstream and fork versions
-- Sort appropriately
-- Keep: docker 28.2.1, tailscale v1.84.0
-```
-
 ### 4. Post-Merge Validation
 
 Run these checks automatically:
@@ -201,10 +175,6 @@ grep -q 'if \[\[ "${without}" ==' docker.sysext/create.sh && echo "VALIDATION FA
 
 # Check 5: Default format is erofs
 grep -q 'format="$(get_optional_param "format" "erofs"' lib/generate.sh || echo "VALIDATION FAILED: Default format not erofs"
-
-# Check 6: Custom versions present
-grep -q "docker 28.2.1" release_build_versions.txt || echo "VALIDATION FAILED: docker 28.2.1 missing"
-grep -q "tailscale v1.84.0" release_build_versions.txt || echo "VALIDATION FAILED: tailscale v1.84.0 missing"
 ```
 
 ### 5. Auto-Fix Validation Failures
@@ -253,9 +223,6 @@ Is this a merge from upstream?
 │   ├─ File: lib/generate.sh
 │   │   └─ Keep erofs as default format
 │   │
-│   ├─ File: release_build_versions.txt
-│   │   └─ Union merge (keep fork + upstream versions)
-│   │
 │   └─ Files: containerd services/configs
 │       └─ DELETE if present
 │
@@ -275,7 +242,6 @@ Preserved fork customizations:
 - .env fork identity (darkspadez/sysext-bakery)
 - Docker-only build logic in docker.sysext/create.sh
 - EROFS default format in lib/generate.sh
-- Custom release versions (docker 28.2.1, tailscale v1.84.0)
 - Removed reintroduced containerd service files
 
 Applied upstream changes:
@@ -341,7 +307,6 @@ After any merge operation, verify:
 - [ ] `.env` exists with `bakery="darkspadez/sysext-bakery"` and `bakery_hub="sysext.darkspadez.me"`
 - [ ] `docker.sysext/create.sh` contains Docker-only removal logic (no conditional --without)
 - [ ] `lib/generate.sh` has default format as `erofs` (not squashfs)
-- [ ] `release_build_versions.txt` includes `docker 28.2.1` and `tailscale v1.84.0`
 - [ ] No containerd systemd service files exist in `docker.sysext/files/`
 - [ ] No containerd config files exist in `docker.sysext/files/`
 - [ ] Build test passes: `./build.sh docker latest`

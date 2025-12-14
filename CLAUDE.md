@@ -85,24 +85,6 @@ local format="$(get_optional_param "format" "erofs" "${@}")"
 
 ---
 
-### 5. Custom Release Versions
-
-**File: `release_build_versions.txt`**
-
-Additional versions added to the build manifest:
-
-```
-docker 28.2.1
-tailscale v1.84.0
-```
-
-**Merge Rule:**
-- When merging upstream changes to this file, preserve these specific version entries
-- If upstream adds newer versions of docker/tailscale, keep both the fork-specific versions AND the upstream versions
-- These versions may be unique to this fork's needs
-
----
-
 ## Merge Workflow Instructions
 
 When merging from upstream, follow this procedure:
@@ -153,12 +135,6 @@ test -f docker.sysext/files/usr/share/containerd/config.toml && echo "ERROR: con
 grep 'format="$(get_optional_param "format" "erofs"' lib/generate.sh || echo "WARNING: Default format is not erofs!"
 ```
 
-#### Check 5: Custom versions present
-```bash
-grep "docker 28.2.1" release_build_versions.txt || echo "WARNING: docker 28.2.1 missing!"
-grep "tailscale v1.84.0" release_build_versions.txt || echo "WARNING: tailscale v1.84.0 missing!"
-```
-
 ### Step 4: Fix Any Violations
 
 If any checks fail, manually restore the fork customizations before committing the merge.
@@ -188,11 +164,6 @@ If any checks fail, manually restore the fork customizations before committing t
 2. Evaluate if erofs should remain the default for this fork
 3. Unless there's a compelling reason, KEEP erofs as default
 
-### If Upstream Modified release_build_versions.txt
-1. Accept upstream additions
-2. Ensure fork-specific versions (docker 28.2.1, tailscale v1.84.0) are preserved
-3. Sort the file appropriately with both upstream and fork versions
-
 ---
 
 ## Commit Message Format
@@ -206,7 +177,6 @@ Merge upstream/main while preserving fork customizations
 - Preserved Docker-only build in docker.sysext/create.sh
 - Removed reintroduced containerd service files
 - Maintained erofs as default format
-- Preserved custom release versions
 
 Fork customizations from: 939ef0ac6144eeb90e1ae357d00aed3d560c118f
 ```
