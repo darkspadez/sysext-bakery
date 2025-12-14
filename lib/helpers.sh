@@ -131,6 +131,20 @@ function github_release_exists() {
 }
 # --
 
+function list_gitlab_tags() {
+  local instance="$1"
+  local projectid="$2"
+
+  local curl="curl -fsSL --retry-delay 1 --retry 60 --retry-connrefused"
+  curl="$curl --retry-max-time 60 --connect-timeout 20"
+
+  $curl \
+    "https://${instance}/api/v4/projects/${projectid}/repository/tags" \
+    | jq -r '.[].name' \
+    | sort -Vr
+}
+# --
+
 function list_github_tags() {
   local org="$1"
   local project="$2"
@@ -190,3 +204,25 @@ function transpile() {
     >"${outfile}" <"${yamlfile}"
 }
 # --
+
+function semver_equals_or_higher() {
+  local ver="${1#v}"
+  local comp="${2#v}"
+
+  local highest="$(echo -e "${ver}\n${comp}" | sort --version-sort --reverse | head -n 1)"
+
+  if [[ "${highest}" == "${ver}" ]] ; then
+    return 0
+  fi
+
+  return 1
+}
+# --
+
+function semver_lower() {
+  if semver_equals_or_higher "${@}"; then
+    return 1
+  fi
+
+  return 0
+}

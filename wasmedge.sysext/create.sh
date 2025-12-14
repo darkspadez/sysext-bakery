@@ -26,13 +26,12 @@ function populate_sysext_root() {
   mkdir -p "${sysextroot}/usr/bin"
   mkdir -p "${sysextroot}/usr/lib"
 
-  PATH_PREFIX=""
-  if [[ "$(printf '%s\n' "0.5.0" "$version" | sort -V | head -n1)" == "$version" ]]; then
-      PATH_PREFIX="WasmEdge-${version}-Linux/"
+  local prefix="."
+  if semver_lower "${version}" "0.15.0" ; then
+    local prefix="WasmEdge-${version}-Linux"
   fi
-  
-  # Single set of copy commands using the path prefix
-  cp -a "${PATH_PREFIX}bin/wasmedge" "${sysextroot}/usr/bin/"
-  cp -a "${PATH_PREFIX}lib/"* "${sysextroot}/usr/lib/"
+
+  cp -a "${prefix}"/bin/* "${sysextroot}"/usr/bin/
+  cp -a "${prefix}"/lib/* "${sysextroot}"/usr/lib/
 }
 # --
