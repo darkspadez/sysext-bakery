@@ -33,7 +33,6 @@ docker-compose 2.22.0
 docker-compose 2.24.5
 docker-compose latest
 
-docker 28.2.1
 docker latest
 
 falco 0.39.1
@@ -73,7 +72,6 @@ rke2 v1.32.2+rke2r1
 rke2 latest
 
 tailscale v1.76.6
-tailscale v1.84.0
 tailscale latest
 
 wasmcloud v1.0.0
